@@ -18,6 +18,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 
+import android.util.Log
+
 
 class FotoapparatCamera constructor(
         val context: Context,
@@ -165,6 +167,8 @@ class FotoapparatCamera constructor(
         val mrzZoneOffset = if (cropToMRZ)  height*0.6 else 0.toDouble()
         val topOffset = (bitmap.height - height) / 2 + mrzZoneOffset
         val leftOffset = (bitmap.width - width) / 2
+
+        Log.d("YONG", "createBitmap =====> " + leftOffset.toInt() + " : " + topOffset.toInt() + " : " + width.toInt() + " : " + (height - mrzZoneOffset).toInt())
 
         return Bitmap.createBitmap(bitmap, leftOffset.toInt(), topOffset.toInt(), width.toInt(), (height - mrzZoneOffset).toInt())
     }
