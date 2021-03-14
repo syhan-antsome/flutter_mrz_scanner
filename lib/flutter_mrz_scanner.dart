@@ -88,6 +88,7 @@ class MRZController {
         if (onParsed != null) {
           final lines = _splitRecognized(call.arguments);
           if (lines.isNotEmpty) {
+            print('SCANNER - tryParse(lines) ====> $lines');
             final result = MRZParser.tryParse(lines);
             if (result != null) {
               onParsed(result);

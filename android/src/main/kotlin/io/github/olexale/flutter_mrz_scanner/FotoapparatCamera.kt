@@ -94,7 +94,9 @@ class FotoapparatCamera constructor(
     }
 
     private fun processFrame(frame: Frame) {
+        Log.d("YONG", "[[ PROCESSFRAME ]]")
         val bitmap = getImage(frame)
+        Log.d("YONG", "[[ PROCESSFRAME -- bitmap ]] -> " + bitmap)
         val cropped = calculateCutoutRect(bitmap, true)
         val mrz = scanMRZ(cropped)
         val fixedMrz = extractMRZ(mrz)
@@ -133,7 +135,7 @@ class FotoapparatCamera constructor(
         val mrzLength = lines.last().length
         val mrzLines = lines.takeLastWhile { it.length == mrzLength }
         val mrz = mrzLines.joinToString("\n")
-        Log.d("YONG", "extractMRZ [mrz] ==> " + mrz)
+        Log.d("YONG", "\n\n\nextractMRZ [mrzLength] ####>>>> " + mrzLength + "\n\n\n\n")
         return mrz
     }
 
@@ -152,6 +154,7 @@ class FotoapparatCamera constructor(
     }
 
     private fun calculateCutoutRect(bitmap: Bitmap, cropToMRZ: Boolean): Bitmap {
+        Log.d("YONG", "[[ CALCURATECUTOUTRECT ]]")
         val documentFrameRatio = 1.42 // Passport's size (ISO/IEC 7810 ID-3) is 125mm × 88mm
         val width: Double
         val height: Double
@@ -169,7 +172,7 @@ class FotoapparatCamera constructor(
         val topOffset = (bitmap.height - height) / 2 + mrzZoneOffset
         val leftOffset = (bitmap.width - width) / 2
 
-        Log.d("YONG", "createBitmap =====> " + leftOffset.toInt() + " : " + topOffset.toInt() + " : " + width.toInt() + " : " + (height - mrzZoneOffset).toInt())
+        Log.d("YONG", "createBitmap #########>>>> " + leftOffset.toInt() + " : " + topOffset.toInt() + " : " + width.toInt() + " : " + (height - mrzZoneOffset).toInt())
 
         return Bitmap.createBitmap(bitmap, leftOffset.toInt(), topOffset.toInt(), width.toInt(), (height - mrzZoneOffset).toInt())
     }
