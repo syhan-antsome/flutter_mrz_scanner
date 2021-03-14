@@ -133,6 +133,7 @@ class FotoapparatCamera constructor(
         val mrzLength = lines.last().length
         val mrzLines = lines.takeLastWhile { it.length == mrzLength }
         val mrz = mrzLines.joinToString("\n")
+        Log.d("YONG", "extractMRZ [mrz] ==> " + mrz)
         return mrz
     }
 
