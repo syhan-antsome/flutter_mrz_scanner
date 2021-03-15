@@ -94,14 +94,18 @@ class FotoapparatCamera constructor(
     }
 
     private fun processFrame(frame: Frame) {
-        Log.d("YONG", "[[ PROCESSFRAME ]]")
+        Log.d("YONG", "[[ PROCESSFRAME ------ START !!!!!! ]]")
         val bitmap = getImage(frame)
-        Log.d("YONG", "[[ PROCESSFRAME -- bitmap ]] -> " + bitmap)
         val cropped = calculateCutoutRect(bitmap, true)
+        Log.d("YONG", "[[ !!!!!!! PROCESSFRAME -- cropped ]] -> " + cropped.width + " :: " + cropped.height)
         val mrz = scanMRZ(cropped)
         val fixedMrz = extractMRZ(mrz)
+        // if(cropped != null) {
+        //     File("cropped").writeBytes(cropped)
+        // }
         mainExecutor.execute {
             messenger.invokeMethod("onParsed", fixedMrz)
+            // messenger.invokeMethod("onCaptured", cropped)
         }
     }
 
@@ -131,7 +135,9 @@ class FotoapparatCamera constructor(
     }
 
     private fun extractMRZ(input: String): String {
+        Log.d("YONG", "\n\n\nextractMRZ [input] ####>>>> " + input + "\n\n\n\n")
         val lines = input.split("\n")
+        Log.d("YONG", "\n\n\nextractMRZ [lines] ####>>>> " + lines + "\n\n\n\n")
         val mrzLength = lines.last().length
         val mrzLines = lines.takeLastWhile { it.length == mrzLength }
         val mrz = mrzLines.joinToString("\n")
@@ -160,15 +166,15 @@ class FotoapparatCamera constructor(
         val height: Double
 
         if (bitmap.height > bitmap.width) {
-            width = bitmap.width * 0.9 // Fill 90% of the width
+            width = bitmap.width * 1.0 //0.9 // Fill 90% of the width
             height = width / documentFrameRatio
         }
         else {
-            height = bitmap.height * 0.75 // Fill 75% of the height
+            height = bitmap.height * 1.0 // 0.75 // Fill 75% of the height
             width = height * documentFrameRatio
         }
 
-        val mrzZoneOffset = if (cropToMRZ)  height*0.6 else 0.toDouble()
+        val mrzZoneOffset = if (cropToMRZ)  height*0.7 else 0.toDouble()
         val topOffset = (bitmap.height - height) / 2 + mrzZoneOffset
         val leftOffset = (bitmap.width - width) / 2
 

@@ -87,14 +87,20 @@ class MRZController {
       case 'onParsed':
         if (onParsed != null) {
           final lines = _splitRecognized(call.arguments);
-          if (lines.isNotEmpty) {
-            print('SCANNER - tryParse(lines) ====> $lines');
+          if (lines.isNotEmpty && lines.length > 1) {
+            print(
+                '\n\n\n#### !!!!!!!!!!!!!!!!!! ##SCANNER - tryParse(lines) ====> $lines \n\n\n');
             final result = MRZParser.tryParse(lines);
             if (result != null) {
               onParsed(result);
             }
           }
         }
+        break;
+      case 'onCaptured':
+        final dynamic cropped = call.arguments;
+        // print(
+        //     '\n\n\n#### !!!!!!!!!!!!!!!!!! ##SCANNER - onCaptured[cropped] ====> ${cropped.toString()} \n\n\n');
         break;
     }
     return Future.value();
